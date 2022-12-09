@@ -3,6 +3,7 @@ import static com.google.common.collect.MoreCollectors.onlyElement;
 
 import com.java.roomDescription.model.Door;
 import com.java.roomDescription.repository.DoorRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Slf4j
 @Service
 public class DoorService{
     public static final String URL_DOORS = "http://cars.cprogroup.ru/api/rubetek/doors/";
@@ -22,13 +24,13 @@ public class DoorService{
         this.repository = repository;
         this.retrofitService = retrofitService;
     }
-    public void saveAll() throws IOException {
+    public void saveAllDoors() throws IOException {
         repository.saveAll(retrofitService.getInfoDoors().getData());
     }
-    public List<Door> getDoors() {
+    public List<Door> getDoorsList() {
         return repository.findAll();
     }
-    public List<String> getRooms() throws IOException {
+    public List<String> getRoomDoors() throws IOException {
         return repository.getRoomDoors();
     }
 
@@ -43,8 +45,11 @@ public class DoorService{
     }
 
     //добавление двери в избранное (favorites)
-    public void addDoorToFavorites(String doorName, boolean isFavorites) {
-        Door door = getDoors().stream().filter(d -> d.getName().equals(doorName)).peek(d -> d.setFavorites(isFavorites)).collect(onlyElement());
+    public void addFavoriteDoor(int id, boolean isFavorites) {
+        Door door = getDoorsList().stream()
+                .filter(d -> d.getId() == id)
+                .peek(d -> d.setFavorites(isFavorites))
+                .collect(onlyElement());
         repository.save(door);
     }
 
@@ -52,12 +57,16 @@ public class DoorService{
         repository.deleteById((long) id);
     }
 
-    public Map<Integer, String> getIdAndFavValue() {
-        return repository.getIdAndFavoriteValue();
-    }
-
-    public void unloadingData() throws IOException {
-        //List<Integer> idRepository = repository.findAll().stream().map(i -> i.getId()).collect(Collectors.toList());
-        //return retrofitService.getInfoDoors().getData().stream().filter(fav -> fav.isFavorites()).collect(Collectors.toList());
+    public void updateData() throws IOException {
+        List<Door> doorList = retrofitService.getInfoDoors().getData().stream()
+                .peek(door -> repository.updateDoors(
+                        door.getName(),
+                        door.getRoom(),
+                        door.getSnapshot(),
+                        door.getId()))
+                .collect(Collectors.toList());
+        System.out.println(getDoorsList());
+        System.out.println(doorList.size());
+        System.out.println("data update");
     }
 }

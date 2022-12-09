@@ -19,8 +19,8 @@ public class RoomService {
     //получить список всех комнат
     public Set<String> getRooms() throws IOException {
         Set<String> rooms = new HashSet<>();
-        rooms.addAll(doorService.getRooms());
-        rooms.addAll(cameraService.getRooms());
+        rooms.addAll(doorService.getRoomDoors());
+        rooms.addAll(cameraService.getRoomCameras());
         rooms.remove(null);
         return rooms;
     }

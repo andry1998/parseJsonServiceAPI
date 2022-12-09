@@ -17,8 +17,7 @@ public class RoomDescriptionApplication implements CommandLineRunner {
 	private final CameraService cameraService;
 	private final RoomService roomService;
 
-	public RoomDescriptionApplication(DoorService doorService, CameraService cameraService, RetrofitService retrofitService, RoomService roomService,
-									  DoorRepository doorRepository) {
+	public RoomDescriptionApplication(DoorService doorService, CameraService cameraService, RetrofitService retrofitService, RoomService roomService) {
 		this.doorService = doorService;
 		this.cameraService = cameraService;
 		this.roomService = roomService;
@@ -30,9 +29,13 @@ public class RoomDescriptionApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		//doorService.saveAll();
-		//cameraService.saveAll();
+		//doorService.saveAllDoors();
+		//cameraService.saveAllCameras();
 		//System.out.println(doorService.getFavoriteDoors());
 		//System.out.println(cameraService.getFavoriteCameras());
+		//doorService.addFavoriteDoor(2, true);
+		//doorService.deleteData(1);
+		//doorService.addFavoriteDoor(2, true);
+		doorService.updateData();
 	}
 }

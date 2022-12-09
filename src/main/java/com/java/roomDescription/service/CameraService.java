@@ -1,8 +1,6 @@
 package com.java.roomDescription.service;
 
 import com.java.roomDescription.model.Camera;
-import com.java.roomDescription.model.Cameras;
-import com.java.roomDescription.model.Door;
 import com.java.roomDescription.repository.CameraRepository;
 import org.springframework.stereotype.Service;
 
@@ -23,19 +21,21 @@ public class CameraService {
         this.retrofitService = retrofitService;
     }
 
-    public void saveAll() throws IOException {
+    public void saveAllCameras() throws IOException {
         repository.saveAll(retrofitService.getInfoCameras().getData().getCameras());
     }
 
-    public List<Camera> getCameras() {
+    public List<Camera> getCamerasList() {
         return repository.findAll();
     }
 
-    public List<String> getRooms() throws IOException {
+    public List<String> getRoomCameras() throws IOException {
         return retrofitService.getInfoCameras().getData().getRoom();
     }
 
-    //получить список камер по комнате
+    /**
+     * Получить список камер по комнате
+     */
     public List<String> getCamerasByRooms(String room) {
         return repository.getCamerasByRooms(room);
     }
@@ -46,14 +46,29 @@ public class CameraService {
     }
 
     //добавление камеры в избранное (favorites)
-    public void addDoorToFavorites(String cameraName, boolean isFavorites) {
-        Camera camera = getCameras().stream().filter(d -> d.getName().equals(cameraName)).peek(d -> d.setFavorites(isFavorites)).collect(onlyElement());
+    public void addFavoriteCamera(int id, boolean isFavorites) {
+        Camera camera = getCamerasList().stream()
+                .filter(d -> d.getId() == id)
+                .peek(d -> d.setFavorites(isFavorites))
+                .findFirst().orElseThrow();
         repository.save(camera);
     }
 
-    //начало и остановка записи у камеры (rec)
-    public void startAndStopCameraRec(String cameraName, boolean isRec) {
-        Camera camera = getCameras().stream().filter(d -> d.getName().equals(cameraName)).peek(d -> d.setRec(isRec)).collect(onlyElement());
+    //начало записи у камеры (rec)
+    public void startCameraRecorder(int id) {
+        Camera camera = getCamerasList().stream()
+                .filter(d -> d.getId() == id)
+                .peek(d -> d.setRec(true))
+                .collect(onlyElement());
+        repository.save(camera);
+    }
+
+    ////остановка записи у камеры (rec)
+    public void stopCameraRecorder(int id) {
+        Camera camera = getCamerasList().stream()
+                .filter(d -> d.getId() == id)
+                .peek(d -> d.setRec(false))
+                .collect(onlyElement());
         repository.save(camera);
     }
 }

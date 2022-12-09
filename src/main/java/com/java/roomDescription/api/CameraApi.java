@@ -5,6 +5,5 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface CameraApi {
-    @GET(".")
-    Call<Cameras> getInfoCameras();
+
 }
