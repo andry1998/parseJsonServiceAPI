@@ -3,10 +3,10 @@ package com.java.roomDescription.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-
 @Entity
 @Table(name = "cameras")
 public class Camera {

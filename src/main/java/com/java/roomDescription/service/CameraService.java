@@ -1,5 +1,7 @@
 package com.java.roomDescription.service;
 
+import com.java.roomDescription.client.CameraClient;
+import com.java.roomDescription.client.DoorClient;
 import com.java.roomDescription.model.Camera;
 import com.java.roomDescription.repository.CameraRepository;
 import org.springframework.stereotype.Service;
@@ -13,16 +15,16 @@ import static com.google.common.collect.MoreCollectors.onlyElement;
 public class CameraService {
     public static final String URL_CAMERAS = "http://cars.cprogroup.ru/api/rubetek/cameras/";
 
-    private final CameraRepository repository;
-    private final RetrofitService retrofitService;
+    final CameraRepository repository;
+    final CameraClient cameraClient;
 
-    public CameraService(CameraRepository cameraRepository, RetrofitService retrofitService) {
+    public CameraService(CameraRepository cameraRepository, CameraClient cameraClient) {
         this.repository = cameraRepository;
-        this.retrofitService = retrofitService;
+        this.cameraClient = cameraClient;
     }
 
-    public void saveAllCameras() throws IOException {
-        repository.saveAll(retrofitService.getInfoCameras().getData().getCameras());
+    public void cameraSynchronization() throws IOException {
+        repository.saveAll(cameraClient.getInfoCameras().getData().getCameras());
     }
 
     public List<Camera> getCamerasList() {
@@ -30,27 +32,29 @@ public class CameraService {
     }
 
     public List<String> getRoomCameras() throws IOException {
-        return retrofitService.getInfoCameras().getData().getRoom();
+        return cameraClient.getInfoCameras().getData().getRoom();
     }
 
     /**
      * Получить список камер по комнате
      */
-    public List<String> getCamerasByRooms(String room) {
-        return repository.getCamerasByRooms(room);
+    public List<Camera> getCamerasByRooms(String room) {
+        return repository.getCamerasByRoom(room);
     }
 
-    //получить список избранных камер
-    public List<String> getFavoriteCameras() {
-        return repository.getFavoriteCameras();
+    /**
+     * получить список избранных камер
+     */
+    public List<Camera> getCamerasByFavorites() {
+        return repository.getCamerasByFavoritesIsTrue();
     }
 
     //добавление камеры в избранное (favorites)
-    public void addFavoriteCamera(int id, boolean isFavorites) {
+    public void addFavoriteCamera(int id, boolean isFavorites) throws Exception {
         Camera camera = getCamerasList().stream()
                 .filter(d -> d.getId() == id)
                 .peek(d -> d.setFavorites(isFavorites))
-                .findFirst().orElseThrow();
+                .findFirst().orElseThrow(() -> new Exception("Camera not found"));
         repository.save(camera);
     }
 

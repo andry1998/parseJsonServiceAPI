@@ -5,11 +5,12 @@ import com.java.roomDescription.service.CameraService;
 import com.java.roomDescription.service.DoorService;
 import com.java.roomDescription.service.RetrofitService;
 import com.java.roomDescription.service.RoomService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
-
+//@Slf4j
 @SpringBootApplication
 //@EnableScheduling
 public class RoomDescriptionApplication implements CommandLineRunner {
@@ -29,13 +30,6 @@ public class RoomDescriptionApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		//doorService.saveAllDoors();
-		//cameraService.saveAllCameras();
-		//System.out.println(doorService.getFavoriteDoors());
-		//System.out.println(cameraService.getFavoriteCameras());
-		//doorService.addFavoriteDoor(2, true);
-		//doorService.deleteData(1);
-		//doorService.addFavoriteDoor(2, true);
-		doorService.updateData();
+		System.out.println(doorService.getByRoom());
 	}
 }
