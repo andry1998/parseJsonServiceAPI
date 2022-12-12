@@ -1,9 +1,8 @@
 package com.java.roomDescription;
 
-import com.java.roomDescription.repository.DoorRepository;
-import com.java.roomDescription.service.CameraService;
-import com.java.roomDescription.service.DoorService;
-import com.java.roomDescription.service.RetrofitService;
+import com.java.roomDescription.controller.RetrofitController;
+import com.java.roomDescription.service.CameraServiceImpl;
+import com.java.roomDescription.service.DoorServiceImpl;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -12,14 +11,14 @@ import java.io.IOException;
 @Component
 public class DataSynchronizationTask {
 
-    private final RetrofitService retrofitService;
-    private final CameraService cameraService;
-    private final DoorService doorService;
+    private final RetrofitController retrofit;
+    private final CameraServiceImpl cameraServiceImpl;
+    private final DoorServiceImpl doorServiceImpl;
 
-    public DataSynchronizationTask(RetrofitService retrofitService, CameraService cameraService, DoorService doorService) {
-        this.retrofitService = retrofitService;
-        this.cameraService = cameraService;
-        this.doorService = doorService;
+    public DataSynchronizationTask(RetrofitController retrofit, CameraServiceImpl cameraServiceImpl, DoorServiceImpl doorServiceImpl) {
+        this.retrofit = retrofit;
+        this.cameraServiceImpl = cameraServiceImpl;
+        this.doorServiceImpl = doorServiceImpl;
     }
 
     @Scheduled(fixedRate = 1000000)

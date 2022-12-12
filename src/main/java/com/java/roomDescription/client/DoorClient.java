@@ -1,20 +1,24 @@
 package com.java.roomDescription.client;
 
+import com.java.roomDescription.controller.RetrofitController;
 import com.java.roomDescription.model.Doors;
-import com.java.roomDescription.service.RetrofitService;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 @Component
 public class DoorClient {
-    final RetrofitService retrofitService;
+    final RetrofitController retrofit;
 
-    public DoorClient(RetrofitService retrofitService) {
-        this.retrofitService = retrofitService;
+    public DoorClient(RetrofitController retrofit) {
+        this.retrofit = retrofit;
     }
 
-    public Doors getInfoDoors() throws IOException {
-        return retrofitService.createAPI().getInfoDoors().execute().body();
+    public Doors getInfoDoors() {
+        try {
+            return retrofit.createAPI().getInfoDoors().execute().body();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
