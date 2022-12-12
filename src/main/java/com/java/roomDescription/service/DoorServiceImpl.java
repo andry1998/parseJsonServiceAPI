@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -59,6 +60,7 @@ public class DoorServiceImpl implements DoorService{
     }
     @Override
     public void updateData() {
+        List<Door> dataDB = repository.findAll();
         List<Door> doorList = doorClient.getInfoDoors().getData().stream()
                 .peek(door -> repository.updateDoors(
                         door.getName(),
@@ -66,8 +68,10 @@ public class DoorServiceImpl implements DoorService{
                         door.getSnapshot(),
                         door.getId()))
                 .collect(Collectors.toList());
-        System.out.println(getListDoor());
-        System.out.println(doorList.size());
-        System.out.println("data update");
+        List<Door> newDataDoor = Stream.concat(doorList.stream(), dataDB.stream())
+                .distinct()
+                .filter(x -> !dataDB.contains(x) || !doorList.contains(x))
+                .toList();
+        repository.saveAll(newDataDoor);
     }
 }

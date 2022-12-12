@@ -12,8 +12,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "rooms")
 public class Room {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Column(name = "name", nullable = false)
     private String name;
 
     public Room(String name) {

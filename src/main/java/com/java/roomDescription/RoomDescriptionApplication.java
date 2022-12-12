@@ -27,6 +27,8 @@ public class RoomDescriptionApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		//roomServiceImpl.roomSynchronization();
+		//doorServiceImpl.deleteData(1);
+		//doorServiceImpl.doorSynchronization();
+		doorServiceImpl.updateData();
 	}
 }

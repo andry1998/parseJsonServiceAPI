@@ -6,6 +6,7 @@ import com.java.roomDescription.client.DoorClient;
 import com.java.roomDescription.model.Room;
 import com.java.roomDescription.repository.RoomRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -38,6 +39,12 @@ public class RoomServiceImpl implements RoomService{
     @Override
     public List getListRoom() {
         return roomRepository.findAll();
+    }
+
+    @Transactional
+    @Override
+    public void deleteByName(String name) {
+        roomRepository.deleteByName(name);
     }
 
 }
