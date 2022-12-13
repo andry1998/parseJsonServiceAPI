@@ -11,7 +11,7 @@ import lombok.*;
 @Table(name = "doors")
 public class Door {
     @Id
-    private int id;
+    private Long id;
     private String name;
     private String room;
     private String snapshot;

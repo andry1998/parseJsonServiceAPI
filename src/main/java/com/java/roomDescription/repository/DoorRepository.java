@@ -18,5 +18,5 @@ public interface DoorRepository extends JpaRepository<Door, Long> {
     @Transactional
     @Modifying
     @Query(value = "update doors set name = ?1, room = ?2, snapshot = ?3 WHERE id = ?4", nativeQuery = true)
-    void updateDoors(String name, String room, String snapshot, int id);
+    void updateDoors(String name, String room, String snapshot, Long id);
 }

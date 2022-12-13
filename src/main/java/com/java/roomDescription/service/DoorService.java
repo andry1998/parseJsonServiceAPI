@@ -11,7 +11,7 @@ public interface DoorService<T> {
     Set<String> getRooms();
     List<T> getDoorsByRoom(String room);
     List<T> getDoorsByFavorites();
-    T addDoorFavorites(int id);
-    void deleteData(int id);
+    T addDoorFavorites(Long id);
+    void deleteData(Long id);
     void updateData();
 }

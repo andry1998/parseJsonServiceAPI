@@ -31,7 +31,7 @@ public class DoorController {
     }
 
     @GetMapping("/favorite/{id}")
-    public Door addDoorFavorites(@PathVariable int id) {
+    public Door addDoorFavorites(@PathVariable Long id) {
         return service.addDoorFavorites(id);
     }
 }
