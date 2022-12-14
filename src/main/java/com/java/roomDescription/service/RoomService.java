@@ -3,8 +3,8 @@ package com.java.roomDescription.service;
 import java.util.List;
 import java.util.Set;
 
-public interface RoomService<T> {
+public interface RoomService<E> {
     void roomSynchronization();
-    List<T> getListRoom();
+    List<E> getListRoom();
     void deleteByName(String name);
 }

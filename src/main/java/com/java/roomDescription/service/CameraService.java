@@ -2,15 +2,16 @@ package com.java.roomDescription.service;
 import java.util.List;
 import java.util.Set;
 
-public interface CameraService<T> {
+public interface CameraService<E, ID> {
     void cameraSynchronization();
-    List<T> getListCamera();
+    List<E> getListCamera();
     Set<String> getRooms();
-    List<T> getCamerasByRoom(String room);
-    List<T> getCamerasByFavorites();
-    T addCameraFavorites(int id);
-    T cameraRecorder(int id, boolean isRec);
-    T startCameraRecording(int id);
-    T stopCameraRecording(int id);
+    List<E> getCamerasByRoom(String room);
+    List<E> getCamerasByFavorites();
+    E addCameraFavorites(ID id);
+    E cameraRecorder(ID id, boolean isRec);
+    E startCameraRecording(ID id);
+    E stopCameraRecording(ID id);
+    void deleteData(ID id);
 
 }

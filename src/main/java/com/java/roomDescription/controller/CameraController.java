@@ -31,17 +31,17 @@ public class CameraController {
     }
 
     @GetMapping("/favorite/{id}")
-    public Camera addCameraFavorites(@PathVariable int id) {
+    public Camera addCameraFavorites(@PathVariable Long id) {
         return service.addCameraFavorites(id);
     }
 
     @GetMapping("/start/{id}")
-    public Camera startCameraRecording(@PathVariable int id) {
+    public Camera startCameraRecording(@PathVariable Long id) {
         return service.startCameraRecording(id);
     }
 
     @GetMapping("/stop/{id}")
-    public Camera stopCameraRecording(@PathVariable int id) {
+    public Camera stopCameraRecording(@PathVariable Long id) {
         return service.stopCameraRecording(id);
     }
 }

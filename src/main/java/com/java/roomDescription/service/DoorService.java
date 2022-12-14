@@ -5,13 +5,12 @@ import com.java.roomDescription.model.Door;
 import java.util.List;
 import java.util.Set;
 
-public interface DoorService<T> {
+public interface DoorService<E, ID> {
     void doorSynchronization();
-    List<T> getListDoor();
+    List<E> getListDoor();
     Set<String> getRooms();
-    List<T> getDoorsByRoom(String room);
-    List<T> getDoorsByFavorites();
-    T addDoorFavorites(Long id);
-    void deleteData(Long id);
-    void updateData();
+    List<E> getDoorsByRoom(String room);
+    List<E> getDoorsByFavorites();
+    E addDoorFavorites(ID id);
+    void deleteData(ID id);
 }
