@@ -9,9 +9,7 @@ import lombok.*;
 
 @Entity
 @Table(name = "doors")
-public class Door {
-    @Id
-    private Long id;
+public class Door extends LongIdEntity{
     private String name;
     private String room;
     private String snapshot;

@@ -14,6 +14,8 @@ public class Room {
     @Id
     @Column(name = "name", nullable = false)
     private String name;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private Camera camera;
 
     public Room(String name) {
         this.name = name;
