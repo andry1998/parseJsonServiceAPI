@@ -5,19 +5,24 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 //@AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Entity
 @Table(name = "rooms")
 public class Room {
     @Id
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private Camera camera;
+//    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+//    private List<Camera> camera;
 
     public Room(String name) {
         this.name = name;
+    }
+
+    public Room() {
+
     }
 }

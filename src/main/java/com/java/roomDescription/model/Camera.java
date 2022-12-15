@@ -15,9 +15,9 @@ public class Camera extends LongIdEntity {
 
     private String name;
     private String snapshot;
-//    @OneToMany(mappedBy = "camera", cascade = CascadeType.ALL)
-//    private List<Room> room;
-    private String room;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "room")
+    private Room room;
     private boolean favorites;
     private boolean rec;
 }

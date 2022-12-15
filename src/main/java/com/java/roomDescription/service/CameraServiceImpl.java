@@ -2,15 +2,21 @@ package com.java.roomDescription.service;
 
 import com.java.roomDescription.client.ClientAPI;
 import com.java.roomDescription.model.Camera;
+import com.java.roomDescription.model.Room;
+import com.java.roomDescription.model.dto.CameraDTO;
 import com.java.roomDescription.repository.CameraRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaUpdate;
 import jakarta.persistence.criteria.Root;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.spi.MappingContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import retrofit2.Converter;
 
+import javax.print.attribute.standard.Destination;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,6 +27,7 @@ import static com.google.common.collect.MoreCollectors.onlyElement;
 public class CameraServiceImpl implements CameraService<Camera, Long>{
     @PersistenceContext
     EntityManager em;
+    final ModelMapper modelMapper = new ModelMapper();
     final CameraRepository repository;
     final ClientAPI client;
 
@@ -34,6 +41,7 @@ public class CameraServiceImpl implements CameraService<Camera, Long>{
     public void cameraSynchronization() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         client.getInfoCameras().getData().getCameras().stream()
+                .map(cameraDTO -> convertToEntity(cameraDTO))
                 .peek(camera -> {
                     if(repository.existsById(camera.getId())) {
                         CriteriaUpdate<Camera> criteriaUpdate = cb.createCriteriaUpdate(Camera.class);
@@ -51,17 +59,25 @@ public class CameraServiceImpl implements CameraService<Camera, Long>{
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public void saveAll() {
+        List<Camera> cameras = client.getInfoCameras().getData().getCameras().stream()
+                .map(cameraDTO -> convertToEntity(cameraDTO))
+                .collect(Collectors.toList());
+        repository.saveAll(cameras);
+    }
+
     @Override
     public List<Camera> getListCamera() {
             return repository.findAll();
     }
 
-    @Override
-    public Set<String> getRooms() {
-        return getListCamera().stream()
-                .map(camera -> camera.getRoom())
-                .collect(Collectors.toSet());
-    }
+//    @Override
+//    public Set<String> getRooms() {
+//        return getListCamera().stream()
+//                .map(camera -> camera.getRoom())
+//                .collect(Collectors.toSet());
+//    }
 
 
     /**
@@ -119,5 +135,22 @@ public class CameraServiceImpl implements CameraService<Camera, Long>{
     @Override
     public void deleteData(Long id) {
         repository.deleteById(id);
+    }
+
+    public void deleteAll() {
+        repository.deleteAll();
+    }
+
+    public CameraDTO convertToDTO(Camera camera) {
+        modelMapper.typeMap(Camera.class, CameraDTO.class).addMappings(mapper -> {
+            mapper.map(src -> src.getRoom().getName(), CameraDTO::setRoom);
+        });
+        return modelMapper.map(camera, CameraDTO.class);
+    }
+
+    public Camera convertToEntity(CameraDTO cameraDTO) {
+        modelMapper.typeMap(CameraDTO.class, Camera.class)
+                .addMappings(mapper -> mapper.<String>map(src -> src.getRoom(), (dest, v) -> dest.getRoom().setName(v)));
+        return modelMapper.map(cameraDTO, Camera.class);
     }
 }

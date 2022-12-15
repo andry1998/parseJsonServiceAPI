@@ -19,6 +19,7 @@ public class RoomServiceImpl implements RoomService{
         this.roomRepository = roomRepository;
     }
 
+
     @Override
     public void roomSynchronization()  {
         Set<Room> rooms = new HashSet<>();
@@ -41,5 +42,7 @@ public class RoomServiceImpl implements RoomService{
     public void deleteByName(String name) {
         roomRepository.deleteByName(name);
     }
+
+    public void deleteAll() {roomRepository.deleteAll();}
 
 }

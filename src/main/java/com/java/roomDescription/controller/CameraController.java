@@ -1,23 +1,34 @@
 package com.java.roomDescription.controller;
 
+import com.java.roomDescription.client.ClientAPI;
 import com.java.roomDescription.model.Camera;
+import com.java.roomDescription.model.dto.CameraDTO;
 import com.java.roomDescription.service.CameraServiceImpl;
+import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/cameras")
 public class CameraController {
     final CameraServiceImpl service;
+    final ModelMapper modelMapper = new ModelMapper();
+    final ClientAPI clientAPI;
 
-    public CameraController(CameraServiceImpl service) {
+    public CameraController(CameraServiceImpl service, ClientAPI clientAPI) {
         this.service = service;
+
+        this.clientAPI = clientAPI;
     }
 
     @GetMapping()
-    public List<Camera> getListCamera() {
-        return service.getListCamera();
+    public List<CameraDTO> getListCamera() {
+        return service.getListCamera().stream()
+                .map(camera -> service.convertToDTO(camera))
+                .collect(Collectors.toList());
+        //return service.getListCamera();
     }
 
     @GetMapping("/{room}")
@@ -44,4 +55,6 @@ public class CameraController {
     public Camera stopCameraRecording(@PathVariable Long id) {
         return service.stopCameraRecording(id);
     }
+
+
 }

@@ -5,7 +5,7 @@ import java.util.Set;
 public interface CameraService<E, ID> {
     void cameraSynchronization();
     List<E> getListCamera();
-    Set<String> getRooms();
+    //Set<String> getRooms();
     List<E> getCamerasByRoom(String room);
     List<E> getCamerasByFavorites();
     E addCameraFavorites(ID id);

@@ -1,5 +1,6 @@
 package com.java.roomDescription;
 
+import com.java.roomDescription.repository.RoomRepository;
 import com.java.roomDescription.service.CameraServiceImpl;
 import com.java.roomDescription.service.DoorServiceImpl;
 import com.java.roomDescription.service.RoomServiceImpl;
@@ -18,11 +19,14 @@ public class RoomDescriptionApplication implements CommandLineRunner {
 	private final DoorServiceImpl doorServiceImpl;
 	private final CameraServiceImpl cameraServiceImpl;
 	private final RoomServiceImpl roomServiceImpl;
+	private final RoomRepository roomRepository;
 
-	public RoomDescriptionApplication(DoorServiceImpl doorServiceImpl, CameraServiceImpl cameraServiceImpl, RoomServiceImpl roomServiceImpl) {
+	public RoomDescriptionApplication(DoorServiceImpl doorServiceImpl, CameraServiceImpl cameraServiceImpl, RoomServiceImpl roomServiceImpl,
+									  RoomRepository roomRepository) {
 		this.doorServiceImpl = doorServiceImpl;
 		this.cameraServiceImpl = cameraServiceImpl;
 		this.roomServiceImpl = roomServiceImpl;
+		this.roomRepository = roomRepository;
 	}
 
 	public static void main(String[] args) {
@@ -31,5 +35,9 @@ public class RoomDescriptionApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		//roomServiceImpl.roomSynchronization();
+		//cameraServiceImpl.rename(1L);
+		//cameraServiceImpl.deleteData(1L);
+		cameraServiceImpl.cameraSynchronization();
 	}
 }
