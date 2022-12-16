@@ -1,12 +1,16 @@
 package com.java.roomDescription.service;
 
 import com.java.roomDescription.client.ClientAPI;
+import com.java.roomDescription.model.Camera;
+import com.java.roomDescription.model.Door;
 import com.java.roomDescription.model.Room;
 import com.java.roomDescription.repository.RoomRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service

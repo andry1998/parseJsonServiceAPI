@@ -1,10 +1,7 @@
 package com.java.roomDescription.model.dto;
 
-import com.java.roomDescription.model.Room;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter

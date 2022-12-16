@@ -2,11 +2,10 @@ package com.java.roomDescription.client;
 
 import com.java.roomDescription.controller.RetrofitController;
 import com.java.roomDescription.model.Cameras;
-
-import java.io.IOException;
-
 import com.java.roomDescription.model.Doors;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 @Component
 public class ClientAPI {
