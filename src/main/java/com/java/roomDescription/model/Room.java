@@ -1,10 +1,10 @@
 package com.java.roomDescription.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 //@AllArgsConstructor
 @Data
@@ -14,6 +14,10 @@ public class Room extends AbstractEntity{
     @Id
     @Column(name = "name")
     private String name;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "room")
+    @JsonManagedReference
+    List<Camera> cameras;
 
     public Room(String name) {
         this.name = name;

@@ -33,24 +33,22 @@ public class CameraServiceImpl implements CameraService<Camera, Long>{
     @Override
     public void cameraSynchronization(List<Camera> cameras) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        cameras.stream()
-                    .peek(camera -> {
-                        if(repository.existsById(camera.getId())) {
-                            CriteriaQuery query = cb.createQuery();
-                            Root<Camera> root = query.from(Camera.class);
-                            query.select(root);
-                            query.where(cb.equal(root.get("id"), camera.getId()));
-                            Camera c = (Camera) em.createQuery(query).getSingleResult();
-                            c.setId(camera.getId());
-                            c.setName(camera.getName());
-                            c.setRoom(camera.getRoom());
-                            c.setSnapshot(camera.getSnapshot());
-                            repository.save(c);
-                        }
-                        else
-                            repository.save(camera);
-                    })
-                    .collect(Collectors.toList());
+        cameras.stream().peek(camera -> {
+            if(repository.existsById(camera.getId())) {
+                CriteriaQuery query = cb.createQuery();
+                Root<Camera> root = query.from(Camera.class);
+                query.select(root);
+                query.where(cb.equal(root.get("id"), camera.getId()));
+                Camera c = (Camera) em.createQuery(query).getSingleResult();
+                c.setId(camera.getId());
+                c.setName(camera.getName());
+                c.setRoom(camera.getRoom());
+                c.setSnapshot(camera.getSnapshot());
+                repository.save(c);
+            }
+            else
+                repository.save(camera);
+        }).collect(Collectors.toList());
     }
 
     @Transactional
@@ -64,14 +62,14 @@ public class CameraServiceImpl implements CameraService<Camera, Long>{
      */
     @Transactional
     @Override
-    public List<Camera> getCamerasByRoom(String room) {
+    public List<Camera> getCamerasInRoom(String room) {
         return repository.getCamerasByRoom(room);
     }
 
     /**
      * получить список избранных камер
      */
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<Camera> getCamerasByFavorites() {
         return repository.getCamerasByFavoritesIsTrue();
@@ -80,9 +78,9 @@ public class CameraServiceImpl implements CameraService<Camera, Long>{
     @Override
     public Camera addCameraFavorites(List<Camera> cameras, Long id) {
         Camera addCamera = cameras.stream()
-                    .filter(camera -> camera.getId() == id)
-                    .peek(camera -> camera.setFavorites(true))
-                    .findFirst()
+                .filter(camera -> camera.getId().equals(id))
+                .peek(camera -> camera.setFavorites(true))
+                .findFirst()
                 .orElseThrow();
         repository.save(addCamera);
         return addCamera;

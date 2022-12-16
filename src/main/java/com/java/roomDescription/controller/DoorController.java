@@ -4,6 +4,7 @@ import com.java.roomDescription.client.ClientAPI;
 import com.java.roomDescription.model.Door;
 import com.java.roomDescription.model.dto.DoorDTO;
 import com.java.roomDescription.service.DoorServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/doors")
 public class DoorController {
@@ -20,14 +22,8 @@ public class DoorController {
     final DoorServiceImpl service;
     final ClientAPI clientAPI;
 
-    public DoorController(DoorServiceImpl doorServiceImpl, ClientAPI clientAPI) {
-        this.service = doorServiceImpl;
-        this.clientAPI = clientAPI;
-    }
-
     @GetMapping()
     public List<DoorDTO> getListDoor() {
-
         return convertToDTOList(service.getListDoor());
     }
 

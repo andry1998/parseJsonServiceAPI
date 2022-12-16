@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "doors")
 public class Door extends LongIdEntity{
     private String name;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "room")
     private Room room;

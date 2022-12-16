@@ -30,7 +30,7 @@ public class CameraController {
 
     @GetMapping("/{room}")
     public List<CameraDTO> getCamerasByRoom(@PathVariable String room) {
-        return convertToDTOList(service.getCamerasByRoom(room));
+        return convertToDTOList(service.getCamerasInRoom(room));
     }
 
     @GetMapping("/favorites")
