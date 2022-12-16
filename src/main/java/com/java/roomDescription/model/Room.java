@@ -11,12 +11,10 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "rooms")
-public class Room {
+public class Room extends AbstractEntity{
     @Id
     @Column(name = "name")
     private String name;
-//    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
-//    private List<Camera> camera;
 
     public Room(String name) {
         this.name = name;

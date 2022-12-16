@@ -20,11 +20,13 @@ public class RoomServiceImpl implements RoomService{
     }
 
 
+    @Transactional
     @Override
     public void roomSynchronization()  {
         Set<Room> rooms = new HashSet<>();
         rooms.addAll(client.getInfoDoors().getData().stream()
-                .map(door -> new Room(door.getRoom())).collect(Collectors.toSet()));
+                .map(door -> new Room(door.getRoom()))
+                .collect(Collectors.toSet()));
         rooms.addAll(client.getInfoCameras().getData().getRoom().stream()
                 .map(room -> new Room(room))
                 .collect(Collectors.toSet()));
@@ -36,13 +38,5 @@ public class RoomServiceImpl implements RoomService{
     public List getListRoom() {
         return roomRepository.findAll();
     }
-
-    @Transactional
-    @Override
-    public void deleteByName(String name) {
-        roomRepository.deleteByName(name);
-    }
-
-    public void deleteAll() {roomRepository.deleteAll();}
 
 }

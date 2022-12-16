@@ -35,9 +35,5 @@ public class RoomDescriptionApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		//roomServiceImpl.roomSynchronization();
-		//cameraServiceImpl.rename(1L);
-		//cameraServiceImpl.deleteData(1L);
-		cameraServiceImpl.cameraSynchronization();
 	}
 }

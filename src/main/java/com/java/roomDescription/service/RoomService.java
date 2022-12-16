@@ -6,5 +6,4 @@ import java.util.Set;
 public interface RoomService<E> {
     void roomSynchronization();
     List<E> getListRoom();
-    void deleteByName(String name);
 }

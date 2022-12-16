@@ -25,10 +25,10 @@ public class DataSynchronizationTask {
 
 
     @Scheduled(fixedRateString = "${task.time}")
-    public void loadingAndUnloadingData() throws IOException {
-//        cameraService.cameraSynchronization();
-//        doorService.doorSynchronization();
-//        roomService.roomSynchronization();
+    public void loadingAndUnloadingData() {
+        roomService.roomSynchronization();
+        cameraService.cameraSynchronization();
+        doorService.doorSynchronization();
         log.info("loading and unloading success");
     }
 }

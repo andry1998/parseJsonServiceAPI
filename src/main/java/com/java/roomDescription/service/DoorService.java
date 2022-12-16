@@ -8,7 +8,6 @@ import java.util.Set;
 public interface DoorService<E, ID> {
     void doorSynchronization();
     List<E> getListDoor();
-    Set<String> getRooms();
     List<E> getDoorsByRoom(String room);
     List<E> getDoorsByFavorites();
     E addDoorFavorites(ID id);

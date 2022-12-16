@@ -11,7 +11,9 @@ import lombok.*;
 @Table(name = "doors")
 public class Door extends LongIdEntity{
     private String name;
-    private String room;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "room")
+    private Room room;
     private String snapshot;
     private boolean favorites;
 

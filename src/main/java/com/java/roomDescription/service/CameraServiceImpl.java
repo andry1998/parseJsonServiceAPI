@@ -2,12 +2,14 @@ package com.java.roomDescription.service;
 
 import com.java.roomDescription.client.ClientAPI;
 import com.java.roomDescription.model.Camera;
+import com.java.roomDescription.model.Door;
 import com.java.roomDescription.model.Room;
 import com.java.roomDescription.model.dto.CameraDTO;
 import com.java.roomDescription.repository.CameraRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.CriteriaUpdate;
 import jakarta.persistence.criteria.Root;
 import org.modelmapper.ModelMapper;
@@ -36,22 +38,35 @@ public class CameraServiceImpl implements CameraService<Camera, Long>{
         this.client = client;
     }
 
+    public List<Camera> getCamerasFromDTO() {
+        return client.getInfoCameras().getData().getCameras().stream()
+                .map(cameraDTO -> convertToEntity(cameraDTO))
+                .collect(Collectors.toList());
+    }
+
+    public List<CameraDTO> getDTOFromCameras() {
+        return repository.findAll().stream()
+                .map(camera -> convertToDTO(camera))
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     @Override
     public void cameraSynchronization() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        client.getInfoCameras().getData().getCameras().stream()
-                .map(cameraDTO -> convertToEntity(cameraDTO))
+        getCamerasFromDTO().stream()
                 .peek(camera -> {
                     if(repository.existsById(camera.getId())) {
-                        CriteriaUpdate<Camera> criteriaUpdate = cb.createCriteriaUpdate(Camera.class);
-                        Root<Camera> root = criteriaUpdate.from(Camera.class);
-                        criteriaUpdate.set("name", camera.getName())
-                                .set("room", camera.getRoom())
-                                .set("snapshot", camera.getSnapshot());
-                        criteriaUpdate.where(cb.equal(root.get("id"), camera.getId()));
-                        em.createQuery(criteriaUpdate);
-                        em.createQuery(criteriaUpdate).executeUpdate();
+                        CriteriaQuery query = cb.createQuery();
+                        Root<Camera> root = query.from(Camera.class);
+                        query.select(root);
+                        query.where(cb.equal(root.get("id"), camera.getId()));
+                        Camera c = (Camera) em.createQuery(query).getSingleResult();
+                        c.setId(camera.getId());
+                        c.setName(camera.getName());
+                        c.setRoom(camera.getRoom());
+                        c.setSnapshot(camera.getSnapshot());
+                        repository.save(c);
                     }
                     else
                         repository.save(camera);
@@ -61,28 +76,19 @@ public class CameraServiceImpl implements CameraService<Camera, Long>{
 
     @Transactional
     public void saveAll() {
-        List<Camera> cameras = client.getInfoCameras().getData().getCameras().stream()
-                .map(cameraDTO -> convertToEntity(cameraDTO))
-                .collect(Collectors.toList());
-        repository.saveAll(cameras);
+        repository.saveAll(getCamerasFromDTO());
     }
 
+    @Transactional
     @Override
     public List<Camera> getListCamera() {
             return repository.findAll();
     }
 
-//    @Override
-//    public Set<String> getRooms() {
-//        return getListCamera().stream()
-//                .map(camera -> camera.getRoom())
-//                .collect(Collectors.toSet());
-//    }
-
-
     /**
      * Получить список камер по комнате
      */
+    @Transactional
     @Override
     public List<Camera> getCamerasByRoom(String room) {
         return repository.getCamerasByRoom(room);
@@ -91,32 +97,39 @@ public class CameraServiceImpl implements CameraService<Camera, Long>{
     /**
      * получить список избранных камер
      */
+    @Transactional
     @Override
     public List<Camera> getCamerasByFavorites() {
         return repository.getCamerasByFavoritesIsTrue();
     }
+    @Transactional
     @Override
     public Camera addCameraFavorites(Long id) {
         Camera camera = getListCamera().stream()
                     .filter(c -> c.getId() == id)
                     .peek(d -> d.setFavorites(true))
-                    .findFirst().orElseThrow();
+                    .findFirst()
+                .orElseThrow();
         repository.save(camera);
         return camera;
     }
+    @Transactional
     @Override
     public Camera cameraRecorder(Long id, boolean isRec) {
         return getListCamera().stream()
                 .filter(camera -> camera.getId() == id)
                 .peek(d -> d.setRec(isRec))
-                .findFirst().orElseThrow();
+                .findFirst()
+                .orElseThrow();
     }
+    @Transactional
     @Override
     public Camera startCameraRecording(Long id) {
         Camera camera = cameraRecorder(id, true);
         repository.save(camera);
         return camera;
     }
+    @Transactional
     @Override
     public Camera stopCameraRecording(Long id) {
         Camera camera = cameraRecorder(id, false);
@@ -124,21 +137,9 @@ public class CameraServiceImpl implements CameraService<Camera, Long>{
         return camera;
     }
     @Transactional
-    public void rename(Long id) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaUpdate<Camera> criteriaUpdate = cb.createCriteriaUpdate(Camera.class);
-        Root<Camera> root = criteriaUpdate.from(Camera.class);
-        criteriaUpdate.set("name", "Test");
-        criteriaUpdate.where(cb.equal(root.get("id"), id));
-        em.createQuery(criteriaUpdate).executeUpdate();
-    }
     @Override
     public void deleteData(Long id) {
         repository.deleteById(id);
-    }
-
-    public void deleteAll() {
-        repository.deleteAll();
     }
 
     public CameraDTO convertToDTO(Camera camera) {

@@ -14,21 +14,13 @@ import java.util.stream.Collectors;
 @RequestMapping("/cameras")
 public class CameraController {
     final CameraServiceImpl service;
-    final ModelMapper modelMapper = new ModelMapper();
-    final ClientAPI clientAPI;
-
-    public CameraController(CameraServiceImpl service, ClientAPI clientAPI) {
+    public CameraController(CameraServiceImpl service) {
         this.service = service;
-
-        this.clientAPI = clientAPI;
     }
 
     @GetMapping()
-    public List<CameraDTO> getListCamera() {
-        return service.getListCamera().stream()
-                .map(camera -> service.convertToDTO(camera))
-                .collect(Collectors.toList());
-        //return service.getListCamera();
+    public List<Camera> getListCamera() {
+        return service.getListCamera();
     }
 
     @GetMapping("/{room}")
