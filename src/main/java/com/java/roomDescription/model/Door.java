@@ -1,5 +1,6 @@
 package com.java.roomDescription.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,10 +15,11 @@ import lombok.NoArgsConstructor;
 public class Door extends LongIdEntity{
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    //@JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room")
     private Room room;
     private String snapshot;
-    private boolean favorites;
+    private Boolean favorites;
 
 }

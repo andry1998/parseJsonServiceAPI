@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Data
 @Entity
 @Table(name = "cameras")
@@ -18,14 +17,23 @@ public class Camera extends LongIdEntity {
 
     String snapshot;
 
-    @JsonBackReference
+    //@JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room")
     Room room;
 
-    boolean favorites;
+    Boolean favorites;
 
-    boolean rec;
+    Boolean rec;
+
+    public Camera(Long id, String name, Room room, String snapshot, Boolean favorites, Boolean rec) {
+        this.setId(id);
+        this.name = name;
+        this.room = room;
+        this.snapshot = snapshot;
+        this.favorites = favorites;
+        this.rec = rec;
+    }
 }
 
 

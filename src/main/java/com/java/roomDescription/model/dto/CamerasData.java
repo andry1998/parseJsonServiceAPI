@@ -1,5 +1,6 @@
-package com.java.roomDescription.model;
+package com.java.roomDescription.model.dto;
 
+import com.java.roomDescription.model.Room;
 import com.java.roomDescription.model.dto.CameraDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;

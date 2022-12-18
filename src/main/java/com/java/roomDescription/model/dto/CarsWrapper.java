@@ -1,4 +1,4 @@
-package com.java.roomDescription.model;
+package com.java.roomDescription.model.dto;
 
 
 import lombok.Data;
