@@ -17,4 +17,7 @@ public interface CameraRepository extends JpaRepository<Camera, Long> {
      * Получить список избранных камер
      */
     List<Camera> getCamerasByFavoritesIsTrue();
+
+    Camera getCameraById(Long id);
+
 }

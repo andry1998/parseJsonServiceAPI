@@ -4,8 +4,7 @@ import com.java.roomDescription.client.ClientAPI;
 import com.java.roomDescription.model.Camera;
 import com.java.roomDescription.model.Door;
 import com.java.roomDescription.model.Room;
-import com.java.roomDescription.model.dto.CameraDTO;
-import com.java.roomDescription.model.dto.DoorDTO;
+import com.java.roomDescription.model.dto.*;
 import com.java.roomDescription.repository.CameraRepository;
 import com.java.roomDescription.repository.DoorRepository;
 import com.java.roomDescription.repository.RoomRepository;
@@ -37,6 +36,7 @@ public class SynchronizationService {
     final CameraRepository cameraRepository;
 
     final DoorRepository doorRepository;
+
     @Transactional
     public void dataSynchronization() {
         roomSynchronization();
@@ -55,55 +55,37 @@ public class SynchronizationService {
                 .getRoom()
                 .stream();
 
-        var rooms = Stream.concat(doorRooms, cameraRooms)
+        var roomsDto = Stream.concat(doorRooms, cameraRooms)
                 .filter(Objects::nonNull)
-                .map(Room::new)
+                .map(RoomDTO::new)
                 .collect(Collectors.toSet());
+
+        List<Room> rooms = new RoomMapper().mapToEntityList(roomsDto.stream().toList());
 
         roomRepository.saveAll(rooms);
     }
     @Transactional
     public void cameraSynchronization() {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CameraDTO dto= new CameraDTO();
-        List<Camera> cameras = dto.convertToEntityList(client.getInfoCameras().getData().getCameras());
-        cameras.stream()
+        CameraMapper mapper = new CameraMapper();
+        mapper.mapToEntityList(client.getInfoCameras().getData().getCameras(), roomRepository).stream()
                 .peek(camera -> {
             if(cameraRepository.existsById(camera.getId())) {
-                CriteriaQuery query = cb.createQuery();
-                Root<Camera> root = query.from(Camera.class);
-                query.select(root);
-                query.where(cb.equal(root.get("id"), camera.getId()));
-                Camera c = (Camera) em.createQuery(query).getSingleResult();
-                c.setId(camera.getId());
-                c.setName(camera.getName());
-                c.setRoom(camera.getRoom());
-                c.setSnapshot(camera.getSnapshot());
-                cameraRepository.save(c);
+                Camera shortCamera = selectShortDataFromDB(camera, camera.getId());
+                setAndSaveShortCameraInDB(shortCamera, camera, cameraRepository);
             }
             else
                 cameraRepository.save(camera);
-        }).collect(Collectors.toList());
+        });
     }
 
     @Transactional
     public void doorSynchronization() {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        client.getInfoDoors().getData().stream()
-                .map(dto -> dto.convertToEntity(dto))
+        DoorMapper mapper = new DoorMapper();
+        mapper.mapToEntityList(client.getInfoDoors().getData(), roomRepository).stream()
                 .peek(door -> {
                     if(doorRepository.existsById(door.getId())) {
-                        CriteriaQuery query = cb.createQuery();
-                        Root<Door> root = query.from(Door.class);
-                        query.select(root);
-                        query.where(cb.equal(root.get("id"), door.getId()));
-                        Door d = (Door) em.createQuery(query).getSingleResult();
-                        //Door d = selectShortDataFromDB(door, door.getId());
-                        d.setId(door.getId());
-                        d.setName(door.getName());
-                        d.setRoom(door.getRoom());
-                        d.setSnapshot(door.getSnapshot());
-                        doorRepository.save(d);
+                        Door shortDoor = selectShortDataFromDB(door, door.getId());
+                        setAndSaveShortDoorInDB(shortDoor, door, doorRepository);
                     }
                     else
                         doorRepository.save(door);
@@ -111,20 +93,28 @@ public class SynchronizationService {
                 .collect(Collectors.toList());
     }
 
-////    public <E> E selectShortDataFromDB(E e, Long id) {
-////        CriteriaBuilder cb = em.getCriteriaBuilder();
-////        CriteriaQuery query = cb.createQuery();
-////        Root<E> root = query.from(e.getClass());
-////        query.select(root);
-////        query.where(cb.equal(root.get("id"), id));
-////        return (E) em.createQuery(query).getSingleResult();
-////    }
-////
-////    public Door setShortDoorInDB(Door door, Long id, String name, Room room, String getSnapshot) {
-////        door.setId(id);
-////        door.setName(name);
-////        door.setRoom(room);
-////        door.setSnapshot(getSnapshot);
-////        return door;
-////    }
+    public <E> E selectShortDataFromDB(E entity, Long id) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery query = cb.createQuery();
+        Root<E> root = query.from(entity.getClass());
+        query.select(root);
+        query.where(cb.equal(root.get("id"), id));
+        return (E) em.createQuery(query).getSingleResult();
+    }
+
+    public void setAndSaveShortDoorInDB(Door doorShort, Door door, DoorRepository doorRepository) {
+        doorShort.setId(door.getId());
+        doorShort.setName(door.getName());
+        doorShort.setRoom(door.getRoom());
+        doorShort.setSnapshot(door.getSnapshot());
+        doorRepository.save(doorShort);
+    }
+
+    public void setAndSaveShortCameraInDB(Camera cameraShort, Camera camera, CameraRepository cameraRepository) {
+        cameraShort.setId(camera.getId());
+        cameraShort.setName(camera.getName());
+        cameraShort.setRoom(camera.getRoom());
+        cameraShort.setSnapshot(camera.getSnapshot());
+        cameraRepository.save(cameraShort);
+    }
 }

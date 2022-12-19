@@ -1,7 +1,7 @@
 package com.java.roomDescription.client;
 
 import com.java.roomDescription.api.API;
-import com.java.roomDescription.controller.RetrofitConfiguration;
+import com.java.roomDescription.configuration.RetrofitConfiguration;
 import com.java.roomDescription.model.dto.CamerasData;
 import com.java.roomDescription.model.dto.CarsWrapper;
 import com.java.roomDescription.model.dto.DoorDTO;

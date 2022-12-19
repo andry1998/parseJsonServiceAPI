@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @MappedSuperclass
 abstract class LongIdEntity extends AbstractEntity {
+
     @Id
     private Long id;
 }

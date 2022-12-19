@@ -1,6 +1,5 @@
 package com.java.roomDescription.model.dto;
 
-
 import lombok.Data;
 
 @Data

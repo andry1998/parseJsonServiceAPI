@@ -1,4 +1,4 @@
-package com.java.roomDescription.controller;
+package com.java.roomDescription.configuration;
 
 import com.java.roomDescription.api.API;
 import org.springframework.beans.factory.annotation.Qualifier;

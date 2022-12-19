@@ -13,13 +13,15 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "doors")
 public class Door extends LongIdEntity{
+
     private String name;
 
-    //@JsonBackReference
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room")
     private Room room;
-    private String snapshot;
-    private Boolean favorites;
 
+    private String snapshot;
+
+    private Boolean favorites;
 }
