@@ -69,13 +69,14 @@ public class SynchronizationService {
         CameraMapper mapper = new CameraMapper();
         mapper.mapToEntityList(client.getInfoCameras().getData().getCameras(), roomRepository).stream()
                 .peek(camera -> {
-            if(cameraRepository.existsById(camera.getId())) {
-                Camera shortCamera = selectShortDataFromDB(camera, camera.getId());
-                setAndSaveShortCameraInDB(shortCamera, camera, cameraRepository);
-            }
-            else
-                cameraRepository.save(camera);
-        });
+                    if(cameraRepository.existsById(camera.getId())) {
+                        Camera shortCamera = selectShortDataFromDB(camera, camera.getId());
+                        setAndSaveShortCameraInDB(shortCamera, camera, cameraRepository);
+                    }
+                    else
+                        cameraRepository.save(camera);
+                })
+                .collect(Collectors.toList());
     }
 
     @Transactional
