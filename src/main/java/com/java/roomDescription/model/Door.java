@@ -9,14 +9,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 @Entity
 @Table(name = "doors")
-public class Door extends LongIdEntity{
+public class Door extends LongIdEntity {
 
     private String name;
 
-    @JsonBackReference
+    //@JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room")
     private Room room;

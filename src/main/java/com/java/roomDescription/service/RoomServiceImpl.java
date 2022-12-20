@@ -5,6 +5,7 @@ import com.java.roomDescription.model.Room;
 import com.java.roomDescription.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class RoomServiceImpl implements RoomService{
 
     final RoomRepository roomRepository;
 
-
+    @Transactional(readOnly = true)
     @Override
     public List<Room> getNameRooms() {
         return roomRepository.findAll();

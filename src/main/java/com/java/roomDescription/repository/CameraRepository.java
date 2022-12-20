@@ -8,6 +8,7 @@ import java.util.List;
 
 @Repository
 public interface CameraRepository extends JpaRepository<Camera, Long> {
+
     /**
      * Получить список камер по комнате
      */

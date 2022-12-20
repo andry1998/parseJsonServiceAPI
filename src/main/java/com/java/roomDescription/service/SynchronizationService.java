@@ -47,6 +47,8 @@ public class SynchronizationService {
     @Transactional
     public void roomSynchronization()  {
 
+        final RoomMapper mapper = new RoomMapper();
+
         var doorRooms = client.getInfoDoors().getData()
                 .stream()
                 .map(DoorDTO::getRoom);
@@ -60,38 +62,36 @@ public class SynchronizationService {
                 .map(RoomDTO::new)
                 .collect(Collectors.toSet());
 
-        List<Room> rooms = new RoomMapper().mapToEntityList(roomsDto.stream().toList());
+        List<Room> rooms = mapper.mapToEntityList(roomsDto.stream().toList());
 
         roomRepository.saveAll(rooms);
     }
     @Transactional
     public void cameraSynchronization() {
         CameraMapper mapper = new CameraMapper();
-        mapper.mapToEntityList(client.getInfoCameras().getData().getCameras(), roomRepository).stream()
-                .peek(camera -> {
+        mapper.mapToEntityList(client.getInfoCameras().getData().getCameras(), roomRepository)
+                .forEach(camera -> {
                     if(cameraRepository.existsById(camera.getId())) {
                         Camera shortCamera = selectShortDataFromDB(camera, camera.getId());
                         setAndSaveShortCameraInDB(shortCamera, camera, cameraRepository);
                     }
                     else
                         cameraRepository.save(camera);
-                })
-                .collect(Collectors.toList());
+                });
     }
 
     @Transactional
     public void doorSynchronization() {
         DoorMapper mapper = new DoorMapper();
-        mapper.mapToEntityList(client.getInfoDoors().getData(), roomRepository).stream()
-                .peek(door -> {
+        mapper.mapToEntityList(client.getInfoDoors().getData(), roomRepository)
+                .forEach(door -> {
                     if(doorRepository.existsById(door.getId())) {
                         Door shortDoor = selectShortDataFromDB(door, door.getId());
                         setAndSaveShortDoorInDB(shortDoor, door, doorRepository);
                     }
                     else
                         doorRepository.save(door);
-                })
-                .collect(Collectors.toList());
+                });
     }
 
     public <E> E selectShortDataFromDB(E entity, Long id) {

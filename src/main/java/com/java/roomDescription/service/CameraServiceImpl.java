@@ -55,7 +55,7 @@ public class CameraServiceImpl implements CameraService<Camera, Long>{
         return camera;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Camera cameraRecorder(Long id, boolean isRec) {
         Camera camera = repository.getCameraById(id);

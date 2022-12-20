@@ -11,17 +11,17 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "rooms")
-public class Room extends AbstractEntity{
+public class Room extends AbstractEntity {
     @Id
     @Column(name = "name")
     String name;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "room", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    //@JsonManagedReference
     List<Camera> cameras;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "room", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    //@JsonManagedReference
     List<Door> doors;
 
     public Room(String name) {
