@@ -13,5 +13,5 @@ public class CamerasData {
 
     private List<String> room;
 
-    private List<CameraDTO> cameras;
+    private List<CameraDto> cameras;
 }

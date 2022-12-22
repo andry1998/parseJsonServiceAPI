@@ -14,13 +14,11 @@ import java.util.List;
 @Service
 public class RoomServiceImpl implements RoomService{
 
-    final ClientAPI client;
-
     final RoomRepository roomRepository;
 
     @Transactional(readOnly = true)
     @Override
-    public List<Room> getNameRooms() {
+    public List<Room> getRooms() {
         return roomRepository.findAll();
     }
 

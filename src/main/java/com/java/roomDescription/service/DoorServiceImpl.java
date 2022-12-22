@@ -18,8 +18,6 @@ public class DoorServiceImpl implements DoorService<Door, Long>{
 
     final DoorRepository repository;
 
-    final ClientAPI client;
-
     @Transactional(readOnly = true)
     @Override
     public List<Door> getListDoor() {
@@ -29,7 +27,7 @@ public class DoorServiceImpl implements DoorService<Door, Long>{
     @Transactional(readOnly = true)
     @Override
     public List<Door> getDoorsByRoom(String room) {
-        return repository.getDoorsByRoom(room);
+        return repository.getDoorsByRoomName(room);
     }
 
     @Transactional(readOnly = true)

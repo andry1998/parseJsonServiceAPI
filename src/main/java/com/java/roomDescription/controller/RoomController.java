@@ -14,13 +14,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/rooms")
 public class RoomController {
+
     final RoomService<Room, Long> roomService;
+
     public RoomController(RoomServiceImpl roomService) {
         this.roomService = roomService;
     }
 
     @GetMapping()
     public List<RoomDTO> getRooms() {
-        return new RoomMapper().mapToDTOList(roomService.getNameRooms());
+        return new RoomMapper().mapToDTOList(roomService.getRooms());
     }
 }

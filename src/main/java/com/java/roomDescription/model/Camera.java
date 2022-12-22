@@ -16,7 +16,6 @@ public class Camera extends LongIdEntity {
 
     String snapshot;
 
-    //@JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room")
     Room room;

@@ -3,10 +3,7 @@ package com.java.roomDescription.service;
 import com.java.roomDescription.client.ClientAPI;
 import com.java.roomDescription.model.Camera;
 import com.java.roomDescription.repository.CameraRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +14,6 @@ import java.util.List;
 public class CameraServiceImpl implements CameraService<Camera, Long>{
 
     final CameraRepository repository;
-
-    final ClientAPI client;
 
     @Transactional(readOnly = true)
     @Override
@@ -33,7 +28,7 @@ public class CameraServiceImpl implements CameraService<Camera, Long>{
     @Transactional(readOnly = true)
     @Override
     public List<Camera> getCamerasInRoom(String room) {
-        return repository.getCamerasByRoom(room);
+        return repository.getCameraByRoomName(room);
     }
 
     /**
@@ -51,8 +46,7 @@ public class CameraServiceImpl implements CameraService<Camera, Long>{
     public Camera addCameraFavorites(Long id) {
         Camera camera = repository.getCameraById(id);
         camera.setFavorites(true);
-        repository.save(camera);
-        return camera;
+        return repository.save(camera);
     }
 
     @Transactional(readOnly = true)

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CameraDTO {
+public class CameraDto {
 
     private Long id;
 

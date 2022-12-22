@@ -1,6 +1,5 @@
 package com.java.roomDescription.controller;
 
-import com.java.roomDescription.client.ClientAPI;
 import com.java.roomDescription.model.Door;
 import com.java.roomDescription.model.dto.DoorDTO;
 import com.java.roomDescription.model.dto.DoorMapper;
@@ -17,9 +16,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/doors")
 public class DoorController {
+
     final DoorMapper mapper = new DoorMapper();
+
     final DoorService<Door, Long> service;
-    final ClientAPI clientAPI;
 
     @GetMapping()
     public List<DoorDTO> getListDoor() {

@@ -3,6 +3,7 @@ package com.java.roomDescription.service;
 import com.java.roomDescription.client.ClientAPI;
 import com.java.roomDescription.model.Camera;
 import com.java.roomDescription.model.Door;
+import com.java.roomDescription.model.LongIdEntity;
 import com.java.roomDescription.model.Room;
 import com.java.roomDescription.model.dto.*;
 import com.java.roomDescription.repository.CameraRepository;
@@ -62,7 +63,7 @@ public class SynchronizationService {
                 .map(RoomDTO::new)
                 .collect(Collectors.toSet());
 
-        List<Room> rooms = mapper.mapToEntityList(roomsDto.stream().toList());
+        var rooms = mapper.mapToEntityList(roomsDto.stream().toList());
 
         roomRepository.saveAll(rooms);
     }
@@ -94,7 +95,7 @@ public class SynchronizationService {
                 });
     }
 
-    public <E> E selectShortDataFromDB(E entity, Long id) {
+    public <E extends LongIdEntity> E selectShortDataFromDB(E entity, Long id) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery query = cb.createQuery();
         Root<E> root = query.from(entity.getClass());

@@ -14,7 +14,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @Component
 public class ClientAPI {
+
     final RetrofitConfiguration retrofit;
+
     final API api;
 
     public CarsWrapper<CamerasData> getInfoCameras() {
@@ -24,6 +26,7 @@ public class ClientAPI {
             throw new RuntimeException(e);
         }
     }
+
     public CarsWrapper<List<DoorDTO>> getInfoDoors() {
         try {
             return api.getInfoDoors().execute().body();

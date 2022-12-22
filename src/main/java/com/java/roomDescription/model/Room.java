@@ -17,11 +17,9 @@ public class Room extends AbstractEntity {
     String name;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "room", cascade = CascadeType.ALL)
-    //@JsonManagedReference
     List<Camera> cameras;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "room", cascade = CascadeType.ALL)
-    //@JsonManagedReference
     List<Door> doors;
 
     public Room(String name) {

@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class CameraMapper {
 
-    public Camera mapToEntity(CameraDTO dto, RoomRepository roomRepository) {
+    public Camera mapToEntity(CameraDto dto, RoomRepository roomRepository) {
         Camera camera = new Camera();
         camera.setId(dto.getId());
         camera.setName(dto.getName());
@@ -20,14 +20,14 @@ public class CameraMapper {
         return camera;
     }
 
-    public List<Camera> mapToEntityList(List<CameraDTO> dtoList, RoomRepository roomRepository) {
+    public List<Camera> mapToEntityList(List<CameraDto> dtoList, RoomRepository roomRepository) {
         return dtoList.stream()
                 .map(dto -> mapToEntity(dto, roomRepository))
                 .collect(Collectors.toList());
     }
 
-    public CameraDTO mapToDTO(Camera camera) {
-        CameraDTO dto = new CameraDTO();
+    public CameraDto mapToDTO(Camera camera) {
+        CameraDto dto = new CameraDto();
         dto.setId(camera.getId());
         dto.setName(camera.getName());
         if(camera.getRoom() != null)
@@ -40,7 +40,7 @@ public class CameraMapper {
         return dto;
     }
 
-    public List<CameraDTO> mapToDTOList(List<Camera> cameraList) {
+    public List<CameraDto> mapToDTOList(List<Camera> cameraList) {
         return cameraList.stream()
                 .map(camera -> mapToDTO(camera))
                 .collect(Collectors.toList());

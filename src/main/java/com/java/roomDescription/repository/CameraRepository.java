@@ -12,7 +12,7 @@ public interface CameraRepository extends JpaRepository<Camera, Long> {
     /**
      * Получить список камер по комнате
      */
-    List<Camera> getCamerasByRoom(String room);
+    List<Camera> getCameraByRoomName(String room);
 
     /**
      * Получить список избранных камер

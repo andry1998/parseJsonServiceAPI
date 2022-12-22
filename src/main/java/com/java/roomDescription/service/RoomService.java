@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface RoomService<Room, Long> {
 
-    List<Room> getNameRooms();
+    List<Room> getRooms();
 }

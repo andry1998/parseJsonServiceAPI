@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface DoorRepository extends JpaRepository<Door, Long> {
 
-    List<Door> getDoorsByRoom(String room);
+    List<Door> getDoorsByRoomName(String room);
 
     Door getDoorById(Long id);
 

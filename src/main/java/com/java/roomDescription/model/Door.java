@@ -15,7 +15,6 @@ public class Door extends LongIdEntity {
 
     private String name;
 
-    //@JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room")
     private Room room;

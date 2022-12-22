@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @MappedSuperclass
-abstract class LongIdEntity extends AbstractEntity {
+public abstract class LongIdEntity extends AbstractEntity {
 
     @Id
     private Long id;
